@@ -2,19 +2,22 @@
 close all; clearvars; clc;
 
 % Symbols used
-syms alpha d a theta q1 q2 q3 q4
+syms alpha d a d1 d2 d3 d4 a1 a2 a3 a4 theta q1 q2 q3 q4 q5
 
 %% DH Table
 
 % Number of Joints
-N = 4;
+N = 2;
 
-row1_dh_tbl = [pi/2 0 sym('d1') sym('q1');];
-row2_dh_tbl = [pi/2 0 0 sym('q2');];
-row3_dh_tbl = [pi/2 0 sym('q3') pi;];
-row4_dh_tbl = [0 sym('a4') 0 sym('q4')];
+row1_dh_tbl = [pi/2 0 0 q1;];
+row2_dh_tbl = [0 0 q2 0;];
+% row3_dh_tbl = [0 a3 0 q3;];
+% row4_dh_tbl = [0 0 q4 0];
+% row5_dh_tbl = [0 0 0 q5];
 
-DHTABLE = [row1_dh_tbl; row2_dh_tbl; row3_dh_tbl; row4_dh_tbl];
+DHTABLE = [row1_dh_tbl; row2_dh_tbl;];
+%  row3_dh_tbl;
+%  row4_dh_tbl;
 disp('DH Table:');
 pretty(DHTABLE)
 
@@ -26,8 +29,8 @@ row3 = [0 sin(alpha) cos(alpha) d;];
 row4 = [0 0 0 1;];
 
 TDH = [row1; row2; row3; row4;];
-disp('DH Transformation Matrix:');
-pretty(TDH);
+% disp('DH Transformation Matrix:');
+% pretty(TDH);
 
 %% Build Transformation matrix for each link
 
@@ -45,29 +48,33 @@ for i = 1:N
     A{i} = subs(TDH);
 end
 
-
 for i=1:N 
     % print each matrix of the transformation matrices
     disp(['Transformation Matrix no. ', num2str(i)]);
     A{i}
+    pause
 end
 
-T = eye(N);
+T = eye(4);
 
 for i=1:N 
     T = T*A{i};
     T = simplify(T);
 end
 
-transformation_matrices = T
+transformation_matrix = T
+pause
 
 % output position
 pos = simplify(T(1:3,4))
+pause
 
 % output normal component
-rotation_matrix = T(1:3,1:3);
+rotation_matrix = simplify(T(1:3,1:3))
+pause
 
-q = [q1, q2, q3, q4];
+%% Compute Linear Jacobian Component
+q = [q1, q2, q3, q4, q5];
 
 % Output position based on a given configuration
 % pos_Q0 = subs(pos, q, {0, pi/2, q3, 0});
@@ -77,9 +84,19 @@ q = [q1, q2, q3, q4];
 JL = jacobian(pos, q);
 JL = simplify(JL);
 disp('JL: ')
-JL = subs(JL, q, {0, pi/2, q3, 0});
+% JL = subs(JL, q, {0, pi/2, q3, 0});
 pretty(JL);
+disp(['Linear Jacobian is', num2str(size(JL, 1)), 'x', num2str(size(JL, 2))]);
+pause
+
 NullSpaceJL = null(JL);
+dimNullSpaceJL = size(NullSpaceJL,2);
+
+if dimNullSpaceJL>0
+   NullSpaceJL=NullSpaceJL/norm(NullSpaceJL);
+else
+   NullSpaceJL;
+end
 
 % Compute Angular component of Geometrical Jacobian
 for i = 1:N

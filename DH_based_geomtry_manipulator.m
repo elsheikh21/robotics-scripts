@@ -37,27 +37,27 @@ jnt3 = robotics.Joint('jnt3','revolute');
 body4 = robotics.RigidBody('body4');
 jnt4 = robotics.Joint('jnt4','revolute');
 body5 = robotics.RigidBody('body5');
-% jnt5 = robotics.Joint('jnt5','revolute');
-% body6 = robotics.RigidBody('body6');
-% jnt6 = robotics.Joint('jnt6','revolute');
+jnt5 = robotics.Joint('jnt5','revolute');
+body6 = robotics.RigidBody('body6');
+jnt6 = robotics.Joint('jnt6','revolute');
 
 setFixedTransform(jnt2,dhparams(2,:),'dh');
 setFixedTransform(jnt3,dhparams(3,:),'dh');
 setFixedTransform(jnt4,dhparams(4,:),'dh');
-% setFixedTransform(jnt5,dhparams(5,:),'dh');
-% setFixedTransform(jnt6,dhparams(6,:),'dh');
+setFixedTransform(jnt5,dhparams(5,:),'dh');
+setFixedTransform(jnt6,dhparams(6,:),'dh');
 
 body2.Joint = jnt2;
 body3.Joint = jnt3;
 body4.Joint = jnt4;
-% body5.Joint = jnt5;
-% body6.Joint = jnt6;
+body5.Joint = jnt5;
+body6.Joint = jnt6;
 
 addBody(robot,body2,'body1')
 addBody(robot,body3,'body2')
 addBody(robot,body4,'body3')
-% addBody(robot,body5,'body4')
-% addBody(robot,body6,'body5')
+addBody(robot,body5,'body4')
+addBody(robot,body6,'body5')
 
 % Verify that your robot was built properly 
 showdetails(robot)

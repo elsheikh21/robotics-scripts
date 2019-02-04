@@ -11,7 +11,7 @@ implemented with the purpose of computing
 - Pseudo-inverse of Jacobian
 - Build transformation matrices from DH table
   - printing out Rotation and Position matrices
-- Elementary rotation around (X, Y, Z) axes `elementary_rotations_SKEW_R(theta, r).m`
-- Rotations around specified vector r and angle theta `elementary_rotations_SKEW_R(theta, r).m`
+- Elementary rotation around (X, Y, Z) axes `elementary_rotations_skewed_rodriguez_formula.m`
+- Rotations around specified vector r and angle theta `elementary_rotations_skewed_rodriguez_formula.m`
 - Build robotic manipulator/arm from DH table `DH_based_geomtry_manipulator.m` [Under development]
 - solving polynomials, substitution of values, factoring, differentiation `extra_script.m`

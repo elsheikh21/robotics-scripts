@@ -1,7 +1,7 @@
 %% Preparing workspace
 clear all; close all; clc;
 
-%% Inverse kinematics
+%% Inverse kinematics (changes based on the Rota
 
 % Rotation matrix
 R = [0 0 -1; -1 0 0; 0 1 0]

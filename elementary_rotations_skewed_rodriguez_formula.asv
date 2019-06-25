@@ -60,7 +60,7 @@ alpha1 = atan2(R_(3, 2)/sin(Beta1), -R_(1, 2)/sin(Beta1));
 gamma1 = atan2(R_(2, 3)/sin(Beta1), R_(2, 1)/sin(Beta1));
 
 disp('1st Beta val is: ');
-disp(Beta1);
+d
 
 disp('Corresponding alpha: ')
 pretty(simplify(vpa(alpha1)));
@@ -71,15 +71,6 @@ pretty(simplify(vpa(gamma1)));
 Beta2 = atan2(-sin_comp, cos_comp);
 alpha2 = atan2(R_(3, 2)/sin(Beta2), -R_(1, 2)/sin(Beta2));
 gamma2 = atan2(R_(2, 3)/sin(Beta2), R_(2, 1)/sin(Beta2));
-
-disp('2nd Beta val is: ');
-disp(Beta1);
-
-disp('Corresponding alpha: ')
-pretty(simplify(vpa(alpha1)));
-
-disp('Corresponding gamma: ')
-pretty(simplify(vpa(gamma1)));
 
 %% Compute Angular Velocity from Rot Mat
 

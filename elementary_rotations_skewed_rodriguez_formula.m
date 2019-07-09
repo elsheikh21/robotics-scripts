@@ -2,7 +2,7 @@
 
 %% Preparing the workspace
 
-close all; clear all; clc;
+close all; clearvars; clc;
 
 % Declaring the symbols to be used
 syms alpha beta gamma theta
@@ -10,47 +10,40 @@ syms alpha beta gamma theta
 %% Elementary Rotation Matrices
 
 % Defining the matrices
-RyBeta = [[cos(beta) 0 -sin(beta);];
-           [0 1 0;];
-           [sin(beta) 0 cos(beta);]];
-        
+RyGamma = [[cos(gamma) 0 -sin(gamma);]; [0 1 0;]; [sin(gamma) 0 cos(gamma);]];
 
-RxGamma = [[1 0 0;]
-    [0 cos(gamma) -sin(gamma);]
-    [0 sin(gamma) cos(gamma);]];
+RxBeta = [[1 0 0;]; [0 cos(beta) -sin(beta);]; [0 sin(beta) cos(beta);]];
 
-RzAlpha = [[cos(alpha) -sin(alpha) 0;]
-           [sin(alpha) cos(alpha) 0;]
-           [0 0 1;]];
+RzAlpha = [[cos(alpha) -sin(alpha) 0;]; [sin(alpha) cos(alpha) 0;]; [0 0 1;]];
 
 % multiplication of 3 matrices
-Rzxy = RzAlpha * RyBeta * RxGamma;
-disp("Body orientation around (Z,Y',X'') using (alpha, beta, gamma)");
-pretty(Rzxy);
+Rxyz = RzAlpha * RxBeta * RyGamma;
+disp("Body orientation around (X,Y',Z'') using (alpha, beta, gamma)");
+% pretty(Rxyz);
 
-disp('Simplified rotation matrix.');
-pretty(simplify(Rzxy));
+% disp('Simplified rotation matrix.');
+pretty(simplify(Rxyz));
 
 %% Substitute into minimal representation with values
 
-disp("Substituting [-pi/2, 0, pi/2] in [R]");
+disp("Substituting [pi/6, -pi/6, pi/3] in [R]");
 pause
 
 % define rotation angles' values
 angles = [alpha, beta, gamma];
 
-alpha_val = -pi/2;
-beta_val = 0;
-gamma_val = pi/2;
+alpha_val = pi/6;
+beta_val = -pi/6;
+gamma_val = pi/3;
 
 angles_val = [alpha_val, beta_val, gamma_val];
 
-Rzxy = subs(Rzxy, angles, angles_val);
-pretty(Rzxy);
+Rxyz = subs(Rxyz, angles, angles_val);
+pretty(Rxyz);
 
 %% Inverse of minimal representation Rotation matrix
 
-R_ = Rzxy;
+R_ = Rxyz;
 
 sin_comp = sqrt(power(R_(2, 1), 2) + power(R_(2, 3), 2));
 cos_comp = R_(2, 2);
@@ -133,5 +126,5 @@ R_theta_r = [power(r(1), 2) * (1 - cos(theta)) + cos(theta) r(1) * r(2) * (1 - c
 % disp('Rotation around vector r with angle theta R(theta, r)');
 % disp(R_theta_r);
 
-o_rot_i = transpose(R_theta_r) * Rzxy;
+o_rot_i = transpose(R_theta_r) * Rxyz;
 % disp(o_rot_i);

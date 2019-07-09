@@ -2,21 +2,26 @@
 close all; clearvars; clc;
 
 % Symbols used
-syms L L1 L2 L3 q1 q2 q3 q4 q5 q6 D theta alpha a d a3 d1 d3 d4 d5
+syms L L1 L2 L3 q1 q2 q3 q4 q5 q6 D theta alpha a d a1 a2 a3 d1 d2 d3 d4 d5 d6 A B C
 
 %% DH Table
 
 % row = [LINK TWIST (ALPHA) || A || LINK OFFSET (D) || JOINT ANGLE (THETA)]
-row1_dh_tbl = [pi/2 0 q1 pi/2;];
-row2_dh_tbl = [pi/2 0 q2 pi/2;];
-row3_dh_tbl = [0 L 0 q3;];
-% row4_dh_tbl = [pi/2 -a3 0 q4;];
+row1_dh_tbl = [-pi/2 0 d1 q1;];
+row2_dh_tbl = [0 a2 0 q2;];
+row3_dh_tbl = [-pi/2 a3 0 q3;];
+row4_dh_tbl = [0 0 d4 q4;];
+% row5_dh_tbl = [0 0 0 q5;];
 
 % Number of Joints
-N = 3;
-DHTABLE = [row1_dh_tbl; row2_dh_tbl; row3_dh_tbl;];
-% N = 4;
-% DHTABLE = [row1_dh_tbl; row2_dh_tbl; row3_dh_tbl; row4_dh_tbl;];
+% N = 2;
+% DHTABLE = [row1_dh_tbl; row2_dh_tbl;];
+% N = 3;
+% DHTABLE = [row1_dh_tbl; row2_dh_tbl; row3_dh_tbl;];
+N = 4;
+DHTABLE = [row1_dh_tbl; row2_dh_tbl; row3_dh_tbl; row4_dh_tbl;];
+% N = 5;
+% DHTABLE = [row1_dh_tbl; row2_dh_tbl; row3_dh_tbl; row4_dh_tbl; row5_dh_tbl];
 
 disp('DH Table:');
 disp('Alpha, a, D, Q');
@@ -75,7 +80,7 @@ rotation_matrix = simplify(T(1:3, 1:3))
 pause
 
 %% Compute Analytical Jacobian
-q = [q1, q2, q3];
+q = [q1, q2, q3, q4, q5];
 r = [[pos];];
 
 J = jacobian(r, q)
@@ -114,17 +119,17 @@ pretty(JL);
 disp(['Linear Jacobian is', num2str(size(JL, 1)), 'x', num2str(size(JL, 2))]);
 pause
 
-% NullSpaceJL = null(JL);
-% dimNullSpaceJL = size(NullSpaceJL, 2);
-% 
-% if dimNullSpaceJL > 0
-%     NullSpaceJL = NullSpaceJL / norm(NullSpaceJL);
-% else
-%     NullSpaceJL;
-% end
-% 
-% % Compute Angular component of Geometrical Jacobian
-% for i = 1:N
-%     trans_mat = A{i};
-%     z_comp_rot_mat = trans_mat(1:3, 3);
-% end
+NullSpaceJL = null(JL);
+dimNullSpaceJL = size(NullSpaceJL, 2);
+
+if dimNullSpaceJL > 0
+    NullSpaceJL = NullSpaceJL / norm(NullSpaceJL);
+else
+    NullSpaceJL;
+end
+
+% Compute Angular component of Geometrical Jacobian
+for i = 1:N
+    trans_mat = A{i};
+    z_comp_rot_mat = trans_mat(1:3, 3);
+end
